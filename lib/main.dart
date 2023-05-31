@@ -55,24 +55,27 @@ class _ToDoAppState extends State<ToDoApp> {
     return counter;
   }
 
+// change tast status
   changeStatus(int index) {
     setState(() {
-      
       tasks[index].status = !tasks[index].status;
     });
   }
+// delete task from list
 
   deleteTask(int index) {
     setState(() {
       tasks.remove(tasks[index]);
     });
   }
+// delete  task used in appbar
 
   deleteAllTask() {
     setState(() {
       tasks.clear();
     });
   }
+// add new  task used in dialog
 
   addTask() {
     setState(() {
