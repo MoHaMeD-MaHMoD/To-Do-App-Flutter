@@ -61,6 +61,18 @@ class _ToDoAppState extends State<ToDoApp> {
     });
   }
 
+  deleteTask(int index) {
+    setState(() {
+      tasks.remove(tasks[index]);
+    });
+  }
+
+  deleteAllTask() {
+    setState(() {
+      tasks.clear();
+    });
+  }
+
   addTask() {
     setState(() {
       if (!myController.text.isEmpty) {
@@ -120,6 +132,17 @@ class _ToDoAppState extends State<ToDoApp> {
             }),
         backgroundColor: Color.fromRGBO(204, 204, 235, 0.8),
         appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  deleteAllTask();
+                },
+                color: Color.fromRGBO(187, 76, 76, 0.8),
+                iconSize: 40,
+                icon: Icon(
+                  Icons.delete_forever,
+                ))
+          ],
           backgroundColor: Color.fromRGBO(0, 0, 79, 0.8),
           title: Text(
             "To DO App",
@@ -140,6 +163,7 @@ class _ToDoAppState extends State<ToDoApp> {
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ToDoCard(
+                      deleteTask: deleteTask,
                       taskTitle: tasks[index].task,
                       doneOrNot: tasks[index].status,
                       changeStatus: changeStatus,
