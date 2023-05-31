@@ -26,9 +26,9 @@ final myController = TextEditingController();
 
 class Task {
   String task;
-  bool done;
+  bool status;
 
-  Task({required this.task, required this.done});
+  Task({required this.task, required this.status});
 }
 
 class ToDoApp extends StatefulWidget {
@@ -40,25 +40,31 @@ class ToDoApp extends StatefulWidget {
 
 class _ToDoAppState extends State<ToDoApp> {
   List tasks = [
-    Task(task: "go to school ", done: true),
-    Task(task: "gplay fol ", done: true),
-    Task(task: "visit unt  ", done: true),
-    Task(task: "visit unt  ", done: true)
+    Task(task: "go to school ", status: true),
+    Task(task: "gplay fol ", status: true),
+    Task(task: "visit unt  ", status: true),
+    Task(task: "visit unt  ", status: true)
   ];
   int cacuDonTaskNum() {
     int counter = 0;
     tasks.forEach((item) {
-      if (item.done) {
+      if (item.status) {
         counter++;
       }
     });
     return counter;
   }
 
+  changeStatus(int index) {
+    setState(() {
+      tasks[index].status = !tasks[index].status;
+    });
+  }
+
   addTask() {
     setState(() {
       if (!myController.text.isEmpty) {
-        tasks.add(Task(task: myController.text, done: false));
+        tasks.add(Task(task: myController.text, status: false));
       }
     });
   }
@@ -134,8 +140,11 @@ class _ToDoAppState extends State<ToDoApp> {
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ToDoCard(
-                        taskTitle: tasks[index].task,
-                        doneOrNot: tasks[index].done);
+                      taskTitle: tasks[index].task,
+                      doneOrNot: tasks[index].status,
+                      changeStatus: changeStatus,
+                      index: index,
+                    );
                   },
                 ),
               )

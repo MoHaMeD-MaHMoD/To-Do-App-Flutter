@@ -5,31 +5,43 @@ import 'package:flutter/material.dart';
 class ToDoCard extends StatelessWidget {
   final String taskTitle;
   final bool doneOrNot;
+  final int index;
+  final Function changeStatus;
 
-  const ToDoCard({super.key, required this.doneOrNot, required this.taskTitle});
+  const ToDoCard({
+    super.key,
+    required this.taskTitle,
+    required this.doneOrNot,
+    required this.changeStatus,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: .92,
-      child: Container(
-        decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 0, 126, 0.8),
-            borderRadius: BorderRadius.circular(9)),
-        padding: EdgeInsets.all(22),
-        margin: EdgeInsets.only(top: 18),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            Text(
-              taskTitle,
-              style: TextStyle(fontSize: 24, color: Colors.white),
-            ),
-            Icon(doneOrNot ? Icons.check : Icons.close,
-            size: 34,
-                color: doneOrNot ? Colors.green : Colors.red),
-          ],
+    return GestureDetector(
+      onTap: () {
+        changeStatus(index);
+      },
+      child: FractionallySizedBox(
+        widthFactor: .92,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Color.fromRGBO(0, 0, 126, 0.8),
+              borderRadius: BorderRadius.circular(9)),
+          padding: EdgeInsets.all(22),
+          margin: EdgeInsets.only(top: 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              Text(
+                taskTitle,
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              Icon(doneOrNot ? Icons.check : Icons.close,
+                  size: 34, color: doneOrNot ? Colors.green : Colors.red),
+            ],
+          ),
         ),
       ),
     );
