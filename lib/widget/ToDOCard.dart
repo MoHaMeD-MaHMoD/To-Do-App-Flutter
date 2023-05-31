@@ -38,7 +38,13 @@ class ToDoCard extends StatelessWidget {
             children: [
               Text(
                 taskTitle,
-                style: TextStyle(fontSize: 24, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 24,
+                  color: doneOrNot ? Colors.grey[500] : Colors.white,
+                  decoration: doneOrNot
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
               ),
               Row(
                 children: [

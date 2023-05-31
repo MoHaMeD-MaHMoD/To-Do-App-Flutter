@@ -57,6 +57,7 @@ class _ToDoAppState extends State<ToDoApp> {
 
   changeStatus(int index) {
     setState(() {
+      
       tasks[index].status = !tasks[index].status;
     });
   }
@@ -157,7 +158,7 @@ class _ToDoAppState extends State<ToDoApp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Counter(tasksCompleted: cacuDonTaskNum(), allTask: tasks.length),
-              Container(
+              SizedBox(
                 height: 600,
                 child: ListView.builder(
                   itemCount: tasks.length,
