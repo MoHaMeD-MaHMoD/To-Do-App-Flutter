@@ -1,148 +1,180 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:quotes/widget/cards.dart';
+import 'package:todo_app/widget/Counter.dart';
+
+import 'widget/ToDOCard.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Quotes(),
+      home: ToDoApp(),
     );
   }
 }
 
-class Quotes extends StatefulWidget {
-  const Quotes({Key? key}) : super(key: key);
+final myController = TextEditingController();
+
+class Task {
+  String task;
+  bool status;
+
+  Task({required this.task, required this.status});
+}
+
+class ToDoApp extends StatefulWidget {
+  const ToDoApp({Key? key}) : super(key: key);
 
   @override
-  State<Quotes> createState() => _QuotesState();
+  State<ToDoApp> createState() => _ToDoAppState();
 }
 
-class BestQuotes {
-  String title;
-  String auther;
-  BestQuotes({required this.title, required this.auther});
-}
+class _ToDoAppState extends State<ToDoApp> {
+  List tasks = [
 
-class _QuotesState extends State<Quotes> {
-  final titleController = TextEditingController();
-  final autherController = TextEditingController();
-
-  List AllQuotes = [
-    BestQuotes(
-        title: "لا يهم كم أنت بطيئ طالما أنك لن تتوقف", auther: "ُالبيكي"),
-    BestQuotes(title: "أنت نتاج قراراتك وليس ظروفك", auther: "ستيفن كوفي"),
-    BestQuotes(
-        title: "التاريخ ما هو إلا خرافة يتم الاتفاق عليها",
-        auther: "نابليون بونابرت"),
-    BestQuotes(title: "ما تزرعه الان فستحصده لاحقا", auther: "لولي داسكال"),
-    BestQuotes(title: "البداية هي أهمّ جزء في أيّ عمل.", auther: "أفلاطون"),
-    BestQuotes(
-        title: "عندما يكون لديك الشجاعة لمتابعة أحلامك فقد تحققها",
-        auther: "والت ديزني"),
-    BestQuotes(
-        title:
-            "من العسير على نفسي أن أتصور الجمال غير مقترن بالفضيلة، الجمال الحق والفضيلة الحقة شيئ واحد ",
-        auther: "توفيق الحكيم"),
   ];
-
-  addQuotes() {
-    setState(() {
-      AllQuotes.add(BestQuotes(
-          title: titleController.text, auther: autherController.text));
+  int cacuDonTaskNum() {
+    int counter = 0;
+    tasks.forEach((item) {
+      if (item.status) {
+        counter++;
+      }
     });
+    return counter;
   }
 
-  deleteQuotes(BestQuotes item) {
+// change tast status
+  changeStatus(int index) {
     setState(() {
-      AllQuotes.remove(item);
+      tasks[index].status = !tasks[index].status;
+    });
+  }
+// delete task from list
+
+  deleteTask(int index) {
+    setState(() {
+      tasks.remove(tasks[index]);
+    });
+  }
+// delete  task used in appbar
+
+  deleteAllTask() {
+    setState(() {
+      tasks.clear();
+    });
+  }
+// add new  task used in dialog
+
+  addTask() {
+    setState(() {
+      if (myController.text.isNotEmpty) {
+        tasks.add(Task(task: myController.text, status: false));
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(20, 30, 20, 40),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Color.fromRGBO(0, 0, 79, 0.8),
+            child: Icon(Icons.add),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9)),
+                    child: Container(
+                      height: 205,
+                      padding: EdgeInsets.fromLTRB(20, 30, 20, 40),
+                      child: Column(children: [
                         TextField(
-                          controller: titleController,
+                          controller: myController,
                           maxLength: 20,
                           decoration: InputDecoration(
                             labelStyle: TextStyle(
-                                color: Color.fromRGBO(0, 125, 230, 0.8)),
+                                color: Color.fromRGBO(158, 158, 0, 0.8)),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 3,
-                                  color: Color.fromRGBO(0, 125, 230, 0.8)),
+                                  color: Color.fromRGBO(158, 158, 0, 0.8)),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            labelText: "Write Your Qoutes ",
-                          ),
-                        ),
-                        TextField(
-                          maxLength: 20,
-                          controller: autherController,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(
-                                color: Color.fromRGBO(0, 125, 230, 0.8)),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 3,
-                                  color: Color.fromRGBO(0, 125, 230, 0.8)),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            labelText: "Who Say It ?",
+                            labelText: "Add new Task",
                           ),
                         ),
                         TextButton(
                             onPressed: () {
-                              addQuotes();
+                              addTask();
                               Navigator.pop(context);
                             },
                             child: Text(
                               "ADD",
                               style: TextStyle(
                                   fontSize: 32,
-                                  color: Color.fromRGBO(230, 105, 0, 0.8)),
+                                  color: Color.fromRGBO(158, 158, 0, 0.8)),
                             ))
                       ]),
-                );
-              },
-              isScrollControlled: true);
-        },
-        backgroundColor: Color.fromRGBO(125, 230, 0, 0.8),
-        child: Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(115, 0, 62, 0.8),
-        title: Text(
-          "Best Quotes",
-          style: TextStyle(fontSize: 27),
+                    ),
+                  );
+                },
+              );
+            }),
+        backgroundColor: Color.fromRGBO(204, 204, 235, 0.8),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  deleteAllTask();
+                },
+                color: Color.fromRGBO(187, 76, 76, 0.8),
+                iconSize: 40,
+                icon: Icon(
+                  Icons.delete_forever,
+                ))
+          ],
+          backgroundColor: Color.fromRGBO(0, 0, 79, 0.8),
+          title: Text(
+            "To DO App",
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          elevation: 0,
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: AllQuotes.map(
-                  (item) => CardWidget(item: item, deleteQuotes: deleteQuotes))
-              .toList(),
-        ),
-      ),
-    );
+        body: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Counter(tasksCompleted: cacuDonTaskNum(), allTask: tasks.length),
+              SizedBox(
+                height: 600,
+                child: ListView.builder(
+                  itemCount: tasks.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ToDoCard(
+                      deleteTask: deleteTask,
+                      taskTitle: tasks[index].task,
+                      doneOrNot: tasks[index].status,
+                      changeStatus: changeStatus,
+                      index: index,
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
